@@ -13,6 +13,11 @@ export function Input({...props}: Props) {
             bg="$gray700"
             borderWidth="$0"
             borderRadius="$md"
+            $focus={{
+                borderWidth: "$1",
+                borderColor: "$amber500",
+                bg: "$gray600",
+            }}
         >
             <InputField
                 {...props}
