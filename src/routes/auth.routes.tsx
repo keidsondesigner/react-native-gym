@@ -1,9 +1,18 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { SignIn } from "@screens/SignIn";
 import { SignUp } from "@screens/SignUp";
 
-const { Navigator, Screen } = createNativeStackNavigator();
+// Tipagem das Rotas sem parametros
+type AuthRoutes = {
+    SignIn: undefined;
+    SignUp: undefined;
+}
+
+// Tipagem das Rotas
+export type AuthNavigatorRoutesProps = NativeStackNavigationProp<AuthRoutes>;
+
+const { Navigator, Screen } = createNativeStackNavigator<AuthRoutes>();
 
 // Rotas Públicas
 export function AuthRoutes() {
