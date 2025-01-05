@@ -3,9 +3,10 @@ import { Button as GluestackButton, Text } from '@gluestack-ui/themed'
 
 type Props = ComponentProps<typeof GluestackButton> & {
     title: string
+    isLoading?: boolean
 }
 
-export function Button({ title, ...rest }: Props) {
+export function Button({ title, isLoading = false, ...rest }: Props) {
     return (
         <GluestackButton 
             {...rest}
@@ -16,6 +17,7 @@ export function Button({ title, ...rest }: Props) {
             $active={{
                 bg: '$amber500'
             }}
+            disabled={isLoading}
         >
             <Text 
                 color="$textDark900" 
