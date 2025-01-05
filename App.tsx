@@ -5,7 +5,7 @@ import {
   Roboto_700Bold
  } from '@expo-google-fonts/roboto';
  import { Text, GluestackUIProvider } from '@gluestack-ui/themed';
- import { config } from '@gluestack-ui/config';
+ import { config } from './config/gluestack-ui.config';
  
 import { Loading } from '@components/Loading';
 
