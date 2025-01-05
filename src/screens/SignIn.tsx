@@ -29,9 +29,14 @@ export function SignIn() {
                         Acesse sua conta
                     </Heading>
 
-                    <Input placeholder="E-mail" />
+                    <Input 
+                        placeholder="E-mail" 
+                        keyboardType="email-address" 
+                        autoCapitalize="none"
+                    />
                     <Input placeholder="Senha" />
                 </Center>
+                
             </VStack>
 
         </VStack>
