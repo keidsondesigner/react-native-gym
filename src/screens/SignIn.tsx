@@ -34,9 +34,9 @@ export function SignIn() {
                         keyboardType="email-address" 
                         autoCapitalize="none"
                     />
-                    <Input placeholder="Senha" />
+                    <Input placeholder="Senha" secureTextEntry />
                 </Center>
-                
+
             </VStack>
 
         </VStack>
