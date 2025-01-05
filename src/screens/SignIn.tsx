@@ -37,7 +37,7 @@ export function SignIn() {
                     />
                     <Input placeholder="Senha" secureTextEntry />
 
-                    <Button title="Acessar" isLoading />
+                    <Button title="Acessar" />
                 </Center>
 
             </VStack>
