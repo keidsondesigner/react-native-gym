@@ -63,7 +63,15 @@ export function AppRoutes() {
           tabBarIcon: ({ color }) => <ProfileSvg fill={color} width={iconSize} height={iconSize} />
         }}
       />
-      <Screen name="exercise" component={Exercise} />
+      <Screen
+        name="exercise"
+        component={Exercise}
+        options={{
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: 'none' },
+          tabBarVisible: false,
+        }}
+      />
     </Navigator>
   )
 }
