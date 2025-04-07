@@ -34,7 +34,7 @@ export function AppRoutes() {
       tabBarActiveTintColor: tokens.colors.green500,
       tabBarInactiveTintColor: tokens.colors.gray200,
       tabBarStyle: {
-        backgroundColor: tokens.colors.gray700,
+        backgroundColor: tokens.colors.gray600,
         borderTopWidth: 0,
         height: Platform.OS === 'ios' ? 'auto' : 70,
         paddingBottom: tokens.space[10],
