@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
+import { FlatList } from "react-native";
 import { GroupTabs } from "@components/GroupTabs";
 import { HomeHeader } from "@components/HomeHeader";
 import { Center, Heading, HStack, Text, VStack } from "@gluestack-ui/themed";
-import { FlatList } from "react-native";
 import { ExerciseCard } from "@components/ExerciseCard";
 
 export function Home() {
@@ -17,6 +19,13 @@ export function Home() {
     { group: "Triceps", name: "Agachamento sumô", description: "3 series x 12 repetições", id: "6", image: "https://www.treinoemalta.com.br/wp-content/uploads/2023/07/Agachamento-sumor-com-Halter.gif" },
     { group: "Ombro", name: "Elevação frontal", description: "3 series x 12 repetições", id: "7", image: "https://www.treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Frontal-com-Halteres.gif" },
   ]);
+
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
+
+  function handleOpenExerciseDetails() {
+    console.log('Navegando para a tela de exercícios');
+    navigation.navigate('exercise');
+  }
 
   return (
     <VStack flex={1}>
@@ -52,6 +61,7 @@ export function Home() {
         renderItem={({ item }) => (
           <ExerciseCard
             data={item}
+            onPress={() => handleOpenExerciseDetails()}
           />
         )}
         showsVerticalScrollIndicator={false}
