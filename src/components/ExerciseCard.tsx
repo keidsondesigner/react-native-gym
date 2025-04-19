@@ -10,9 +10,9 @@ type Props = TouchableOpacityProps & {
   };
 };
 
-export function ExerciseCard({ data: { name, description, image } }: Props) {
+export function ExerciseCard({ data: { name, description, image }, ...rest }: Props) {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity {...rest}>
       <HStack
         bg="$gray600"
         p="$4"
