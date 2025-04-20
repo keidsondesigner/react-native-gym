@@ -14,19 +14,19 @@ export function Button({ title, isLoading = false, variant = 'solid', ...rest }:
             disabled={isLoading}
             w="$full"
             h="$14"
-            bg={variant === 'outline' ? "transparent" : "$amber400"}
+            bg={variant === 'outline' ? "transparent" : "$green500"}
             borderWidth="$1"
-            borderColor={variant === 'outline' ? "$amber500" : "transparent"}
+            borderColor={variant === 'outline' ? "$green500" : "transparent"}
             borderRadius="$md"
             $active={{
-                bg: variant === 'outline' ? "transparent" : "$amber500",
+                bg: variant === 'outline' ? "transparent" : "$green500",
             }}
         >
             {isLoading 
                 ? ( <ButtonSpinner color="$textDark900" /> ) 
                 : (
                     <Text 
-                        color={variant === 'outline' ? "$amber500" : "$textDark900"}
+                        color={variant === 'outline' ? "$green500" : "$textDark900"}
                         fontWeight="$bold" 
                         fontFamily="$body" 
                         fontSize="$md"
