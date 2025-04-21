@@ -13,30 +13,34 @@ export function Profile() {
   const [userPhoto, setUserPhoto] = useState("https://github.com/keidsondesigner.png");
 
   async function handleUserPhotoSelect() {
-    console.log("Selecionar foto do usuário");
-    const photoSelected = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
 
-    if (photoSelected.canceled) {
-      return;
-    }
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+      });
 
-    const photoURI = photoSelected.assets[0].uri;
-
-    if (photoURI) {
-      const photoInfo = await FileSystem.getInfoAsync(photoURI);
-
-      if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
-        return alert("Essa imagem é muito grande. Escolha uma de até 5MB");
+      if (photoSelected.canceled) {
+        return;
       }
 
-      setUserPhoto(photoURI);
-    }
+      const photoURI = photoSelected.assets[0].uri;
 
+      if (photoURI) {
+        const photoInfo = await FileSystem.getInfoAsync(photoURI);
+
+        if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+          return alert("Essa imagem é muito grande. Escolha uma de até 5MB");
+        }
+
+        // A imagem só troca, se o tamanho for menor que 5MB
+        setUserPhoto(photoURI);
+      }
+    } catch (error) {
+      console.log("Erro ao selecionar foto do usuário", error);
+    }
   }
 
   return (
