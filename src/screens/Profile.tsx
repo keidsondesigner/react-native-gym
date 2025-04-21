@@ -1,11 +1,24 @@
+import { ScrollView, TouchableOpacity } from "react-native";
+import { Center, Heading, Text, VStack } from "@gluestack-ui/themed";
+import * as ImagePicker from 'expo-image-picker';
+
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhoto } from "@components/UserPhoto";
-import { Center, Heading, Text, VStack } from "@gluestack-ui/themed";
-import { ScrollView, TouchableOpacity } from "react-native";
 
 export function Profile() {
+
+  async function handleUserPhotoSelect() {
+    console.log("Selecionar foto do usuário");
+    await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+  }
+
   return (
     <VStack flex={1}>
       <ScreenHeader title="Profile" />
@@ -19,7 +32,10 @@ export function Profile() {
             alt="Foto do usuário"
             size="lg"
           />
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleUserPhotoSelect}
+            activeOpacity={0.7}
+          >
             <Text fontSize="$md" fontWeight="bold" mt="$2" color="$green500">
               Alterar Foto
             </Text>
