@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
-import { Center, Heading, Text, VStack } from "@gluestack-ui/themed";
+import { Center, Heading, Text, useToast, VStack } from "@gluestack-ui/themed";
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
@@ -8,9 +8,12 @@ import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhoto } from "@components/UserPhoto";
+import { ToastMsg } from "@components/ToastMsg";
 
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState("https://github.com/keidsondesigner.png");
+
+  const toast = useToast();
 
   async function handleUserPhotoSelect() {
 
@@ -32,7 +35,23 @@ export function Profile() {
         const photoInfo = await FileSystem.getInfoAsync(photoURI);
 
         if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
-          return alert("Essa imagem é muito grande. Escolha uma de até 5MB");
+          return toast.show({
+            placement: "top",
+            containerStyle: {
+              marginTop: 50,
+            },
+            render: ({ id }) => {
+              return (
+                <ToastMsg
+                  id={id}
+                  title="Essa imagem é muito grande!"
+                  description="Escolha uma imagem de até 5MB."
+                  action="error"
+                  onClose={() => toast.close(id)}
+                />
+              );
+            }
+          });
         }
 
         // A imagem só troca, se o tamanho for menor que 5MB
