@@ -1,11 +1,48 @@
+import { useState } from "react";
+import { ScrollView, TouchableOpacity } from "react-native";
+import { Center, Heading, Text, VStack } from "@gluestack-ui/themed";
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhoto } from "@components/UserPhoto";
-import { Center, Heading, Text, VStack } from "@gluestack-ui/themed";
-import { ScrollView, TouchableOpacity } from "react-native";
 
 export function Profile() {
+  const [userPhoto, setUserPhoto] = useState("https://github.com/keidsondesigner.png");
+
+  async function handleUserPhotoSelect() {
+
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+      });
+
+      if (photoSelected.canceled) {
+        return;
+      }
+
+      const photoURI = photoSelected.assets[0].uri;
+
+      if (photoURI) {
+        const photoInfo = await FileSystem.getInfoAsync(photoURI);
+
+        if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+          return alert("Essa imagem é muito grande. Escolha uma de até 5MB");
+        }
+
+        // A imagem só troca, se o tamanho for menor que 5MB
+        setUserPhoto(photoURI);
+      }
+    } catch (error) {
+      console.log("Erro ao selecionar foto do usuário", error);
+    }
+  }
+
   return (
     <VStack flex={1}>
       <ScreenHeader title="Profile" />
@@ -15,11 +52,14 @@ export function Profile() {
       >
         <Center flex={1} mt="$8" mb="$8" px="$8">
           <UserPhoto
-            source={{ uri: "https://github.com/keidsondesigner.png" }}
+            source={{ uri: userPhoto }}
             alt="Foto do usuário"
             size="lg"
           />
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleUserPhotoSelect}
+            activeOpacity={0.7}
+          >
             <Text fontSize="$md" fontWeight="bold" mt="$2" color="$green500">
               Alterar Foto
             </Text>
