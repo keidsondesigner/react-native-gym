@@ -17,6 +17,7 @@ export function Profile() {
           <UserPhoto
             source={{ uri: "https://github.com/keidsondesigner.png" }}
             alt="Foto do usuário"
+            size="lg"
           />
           <TouchableOpacity>
             <Text fontSize="$md" fontWeight="bold" mt="$2" color="$green500">
