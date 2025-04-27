@@ -7,12 +7,24 @@ import BackgroundImage from '@assets/background.png';
 import Logo from '@assets/logo.svg';
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { useState } from "react";
 
 export function SignUp() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
     function handleGoBack() {
         navigation.goBack();
+    }
+
+    function handleSignUp() {
+        // Criando conta de usuário, usando Input com Estados(useState)
+        console.log({ name, email, password, confirmPassword });
     }
 
     return (
@@ -43,17 +55,33 @@ export function SignUp() {
                             Crie sua conta
                         </Heading>
 
-                        <Input placeholder="Nome" />
+                        <Input 
+                            placeholder="Nome"
+                            onChangeText={setName}
+                        />
 
                         <Input 
                             placeholder="E-mail" 
                             keyboardType="email-address" 
                             autoCapitalize="none"
+                            onChangeText={setEmail}
                         />
 
-                        <Input placeholder="Senha" secureTextEntry />
+                        <Input
+                            placeholder="Senha"
+                            secureTextEntry
+                            onChangeText={setPassword}
+                        />
+                        <Input
+                            placeholder="Confirme sua senha"
+                            secureTextEntry
+                            onChangeText={setConfirmPassword}
+                        />
 
-                        <Button title="Criar e Acessar"  />
+                        <Button
+                            title="Criar e Acessar"
+                            onPress={handleSignUp}
+                        />
                     </Center>
 
                     <Button title="Voltar para o login" variant="outline" mt="$12" mb="$12"  onPress={handleGoBack}/>
