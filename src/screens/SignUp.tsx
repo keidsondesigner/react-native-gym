@@ -10,6 +10,13 @@ import { Button } from "@components/Button";
 // import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
+type SignUpFormDataProps = {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
 export function SignUp() {
     // const [name, setName] = useState('');
     // const [email, setEmail] = useState('');
@@ -31,7 +38,7 @@ export function SignUp() {
     // o 'data' é o que contém os dados do formulário
     // o 'formState' é o estado do formulário
     // o 'errors' é o que contém os erros do formulário
-    const { control, handleSubmit, formState: { errors }} = useForm({
+    const { control, handleSubmit, formState: { errors }} = useForm<SignUpFormDataProps>({
         defaultValues: {
             name: '',
             email: '',
@@ -46,7 +53,7 @@ export function SignUp() {
         navigation.goBack();
     }
 
-    function handleSignUp(data: any) {
+    function handleSignUp(data: SignUpFormDataProps) {
         // Criando conta de usuário, usando Input com Estados(useState)
         // console.log({ name, email, password, confirmPassword });
 
