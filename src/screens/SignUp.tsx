@@ -98,6 +98,7 @@ export function SignUp() {
                                     placeholder="Nome"
                                     onChangeText={onChange}
                                     value={value}
+                                    errorMessage={errors.name?.message}
                                 />
                             )}
                             rules={{
@@ -108,7 +109,6 @@ export function SignUp() {
                                 }
                             }}
                         />
-                        {errors.name && <Text color="$red500">{errors.name.message}</Text>}
 
                         <Controller
                             control={control}
@@ -120,6 +120,7 @@ export function SignUp() {
                                     autoCapitalize="none"
                                     onChangeText={onChange}
                                     value={value}
+                                    errorMessage={errors.email?.message}
                                 />
                             )}
                             rules={{
@@ -130,7 +131,6 @@ export function SignUp() {
                                 }
                             }}
                         />
-                        {errors.email && <Text color="$red500">{errors.email.message}</Text>}
 
                         <Controller
                             control={control}
@@ -141,6 +141,7 @@ export function SignUp() {
                                     secureTextEntry
                                     onChangeText={onChange}
                                     value={value}
+                                    errorMessage={errors.password?.message}
                                 />
                             )}
                             rules={{
@@ -151,7 +152,6 @@ export function SignUp() {
                                 }
                             }}
                         />
-                        {errors.password && <Text color="$red500">{errors.password.message}</Text>}
 
                         <Controller
                             control={control}
@@ -164,6 +164,7 @@ export function SignUp() {
                                     value={value}
                                     onSubmitEditing={handleSubmit(handleSignUp)}
                                     returnKeyType="send"
+                                    errorMessage={errors.confirmPassword?.message}
                                 />
                             )}
                             rules={{
@@ -179,7 +180,6 @@ export function SignUp() {
                                 }
                             }}
                         />
-                        {errors.confirmPassword && <Text color="$red500">{errors.confirmPassword.message}</Text>}
 
                         <Button
                             title="Criar e Acessar"
