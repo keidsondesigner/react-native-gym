@@ -38,7 +38,8 @@ export function SignUp() {
     // o 'data' é o que contém os dados do formulário
     // o 'formState' é o estado do formulário
     // o 'errors' é o que contém os erros do formulário
-    const { control, handleSubmit, formState: { errors }} = useForm<SignUpFormDataProps>({
+    // o 'watch' é o que observa o estado do Input
+    const { control, handleSubmit, formState: { errors }, watch } = useForm<SignUpFormDataProps>({
         defaultValues: {
             name: '',
             email: '',
@@ -99,7 +100,15 @@ export function SignUp() {
                                     value={value}
                                 />
                             )}
+                            rules={{
+                                required: 'Informe o nome',
+                                minLength: {
+                                    value: 3,
+                                    message: 'Nome deve ter pelo menos 3 caracteres'
+                                }
+                            }}
                         />
+                        {errors.name && <Text color="$red500">{errors.name.message}</Text>}
 
                         <Controller
                             control={control}
@@ -113,7 +122,15 @@ export function SignUp() {
                                     value={value}
                                 />
                             )}
+                            rules={{
+                                required: 'Informe o e-mail',
+                                pattern: {
+                                    value: /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$/i,
+                                    message: 'E-mail inválido'
+                                }
+                            }}
                         />
+                        {errors.email && <Text color="$red500">{errors.email.message}</Text>}
 
                         <Controller
                             control={control}
@@ -126,7 +143,15 @@ export function SignUp() {
                                     value={value}
                                 />
                             )}
+                            rules={{
+                                required: 'Informe a senha',
+                                minLength: {
+                                    value: 6,
+                                    message: 'Senha deve ter pelo menos 6 caracteres'
+                                }
+                            }}
                         />
+                        {errors.password && <Text color="$red500">{errors.password.message}</Text>}
 
                         <Controller
                             control={control}
@@ -141,7 +166,20 @@ export function SignUp() {
                                     returnKeyType="send"
                                 />
                             )}
+                            rules={{
+                                required: 'Confirme a senha',
+                                minLength: {
+                                    value: 6,
+                                    message: 'Senha deve ter pelo menos 6 caracteres'
+                                },
+                                validate: (value) => {
+                                    if (value !== watch('password')) {
+                                        return 'As senhas não conferem';
+                                    }
+                                }
+                            }}
                         />
+                        {errors.confirmPassword && <Text color="$red500">{errors.confirmPassword.message}</Text>}
 
                         <Button
                             title="Criar e Acessar"
