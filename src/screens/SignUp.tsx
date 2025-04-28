@@ -2,13 +2,17 @@ import { VStack, Image, Center, Text, Heading, ScrollView } from "@gluestack-ui/
 
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
+import { useForm, Controller } from "react-hook-form";
+
+import axios from "axios";
+import { api } from "@services/api";
 
 import BackgroundImage from '@assets/background.png';
 import Logo from '@assets/logo.svg';
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { Alert } from "react-native";
 // import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 
 type SignUpFormDataProps = {
     name: string;
@@ -54,12 +58,23 @@ export function SignUp() {
         navigation.goBack();
     }
 
-    function handleSignUp(data: SignUpFormDataProps) {
+    async function handleSignUp({ name, email, password }: Omit<SignUpFormDataProps, 'confirmPassword'>) {
         // Criando conta de usuário, usando Input com Estados(useState)
         // console.log({ name, email, password, confirmPassword });
 
         // Criando conta de usuário, usando React Hook Form
-        console.log(data);
+        // console.log(data);
+
+        // usando Axios
+        try {
+            const response = await api.post('/users', { name, email, password });
+            console.log(response.data);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.log(error.response?.data);
+                Alert.alert(error.response?.data.message);
+            }
+        }
     }
 
     return (
