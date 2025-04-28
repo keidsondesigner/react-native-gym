@@ -44,8 +44,9 @@ api.interceptors.response.use(response => response, error => {
     return Promise.reject(new AppError(error.response.data.message));
 
   } else {
-    // Se for um Erro generico
-    return Promise.reject(new AppError('Erro no servidor, tente mais tarde.'));
+    // Se não cair no erro acima que ´um erro personalizado
+    // retorna o erro generico
+    return Promise.reject(error);
   }
 });
 
