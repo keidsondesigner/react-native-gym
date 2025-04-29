@@ -1,14 +1,17 @@
-import { VStack, Image, Center, Text, Heading, ScrollView } from "@gluestack-ui/themed";
+import { useState } from "react";
+import { VStack, Image, Center, Text, Heading, ScrollView, useToast, Toast, ToastTitle, ToastDescription } from "@gluestack-ui/themed";
 
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
+import { useForm, Controller } from "react-hook-form";
+
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
 
 import BackgroundImage from '@assets/background.png';
 import Logo from '@assets/logo.svg';
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
-// import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 
 type SignUpFormDataProps = {
     name: string;
@@ -18,6 +21,9 @@ type SignUpFormDataProps = {
 }
 
 export function SignUp() {
+    const [isLoading, setIsLoading] = useState(false);
+    const toast = useToast();
+
     // const [name, setName] = useState('');
     // const [email, setEmail] = useState('');
     // const [password, setPassword] = useState('');
@@ -54,12 +60,55 @@ export function SignUp() {
         navigation.goBack();
     }
 
-    function handleSignUp(data: SignUpFormDataProps) {
+    async function handleSignUp({ name, email, password }: Omit<SignUpFormDataProps, 'confirmPassword'>) {
         // Criando conta de usuário, usando Input com Estados(useState)
         // console.log({ name, email, password, confirmPassword });
 
         // Criando conta de usuário, usando React Hook Form
-        console.log(data);
+        // console.log(data);
+
+        // usando Axios
+        try {
+            setIsLoading(true);
+            const response = await api.post('/users', { name, email, password });
+            console.log(response.data);
+        } catch (error) {
+            // Se o erro for uma instância da classe AppError, retorna true;
+            const isAppError = error instanceof AppError;
+            console.log('isAppError: ', isAppError);
+
+            const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde';
+            console.log('title: ', title);
+
+            toast.show({
+                id: 'error-toast',
+                placement: "top",
+                duration: 5000,
+                render: ({ id }) => {
+                    return (
+                        <Toast
+                            nativeID={`toast-${id}`}
+                            action="error"
+                            variant="solid"
+                            mt="$14"
+                            bg="$red500"
+                            width={343}
+                        >
+                            <VStack>
+                                <ToastTitle color="$textDark900" fontSize="$lg" fontWeight="bold">
+                                    Error!
+                                </ToastTitle>
+                                <ToastDescription color="$textDark900" size="md">
+                                    {title}
+                                </ToastDescription>
+                            </VStack>
+                        </Toast>
+                    )
+                },
+            });
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -184,6 +233,7 @@ export function SignUp() {
                         <Button
                             title="Criar e Acessar"
                             onPress={handleSubmit(handleSignUp)}
+                            isLoading={isLoading}
                         />
                     </Center>
 
