@@ -7,8 +7,11 @@ import {
  import { GluestackUIProvider, Box } from '@gluestack-ui/themed';
  import { config } from './config/gluestack-ui.config';
  
-import { Loading } from '@components/Loading';;
+import { Loading } from '@components/Loading';
 import { Routes } from '@routes/index';
+
+// 2 - Provendo o contexto de autenticação para toda a aplicação;
+import { AuthContextProvider } from '@contexts/AuthContext'
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
@@ -21,10 +24,9 @@ export default function App() {
           backgroundColor="transparent" 
           translucent 
         />
-        {fontsLoaded 
-          ? ( <Routes /> ) 
-          : ( <Loading /> )
-        }
+        <AuthContextProvider>
+          { fontsLoaded ? <Routes /> : <Loading /> }
+        </AuthContextProvider>
       </Box>
     </GluestackUIProvider>
   );
