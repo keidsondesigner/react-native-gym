@@ -7,15 +7,15 @@ import { AuthRoutes } from "./auth.routes";
 import { AppRoutes } from "./app.routes";
 
 // 4 - Contexto de autenticação, que serao utilizado para verificar se o usuário está autenticado ou não
-import { AuthContext } from '@contexts/AuthContext'
+import { useAuth } from '@hooks/useAuth'
 
 export function Routes() {
     const theme = DefaultTheme;
     theme.colors.background = gluestackUIConfig.tokens.colors.gray700;
 
     // 5 - Verifica se o usuário está autenticado ou não, e renderiza as rotas de acordo com o estado de autenticação
-    const contextData = useContext(AuthContext);
-    console.log('contextData - info do usuário', contextData);
+    const  { user } = useAuth();
+    console.log('contextData - info do usuário', user);
 
     return (
         <Box flex={1} bg="$gray700">
