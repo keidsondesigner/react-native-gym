@@ -1,8 +1,10 @@
-import { VStack, Image, Center, Text, Heading, ScrollView } from "@gluestack-ui/themed";
+import { VStack, Image, Center, Text, Heading, ScrollView, set } from "@gluestack-ui/themed";
 
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 import { useForm, Controller } from "react-hook-form";
+
+import { useAuth } from "@hooks/useAuth";
 
 import BackgroundImage from '@assets/background.png';
 import Logo from '@assets/logo.svg';
@@ -16,6 +18,7 @@ type SignInFormDataProps = {
 }
 
 export function SignIn() {
+    const { signIn } = useAuth();
 
     const { control, handleSubmit, formState: { errors } } = useForm<SignInFormDataProps>({
         defaultValues: {
@@ -32,6 +35,7 @@ export function SignIn() {
 
     function handleSignIn(data: SignInFormDataProps) {
         console.log(data);
+        signIn(data.email, data.password);
     }
 
     return (
