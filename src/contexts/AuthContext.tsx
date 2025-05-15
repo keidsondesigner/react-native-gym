@@ -1,4 +1,4 @@
-import { useAuth } from '@hooks/useAuth';
+import { api } from '@services/api';
 import { createContext, ReactNode, useState } from 'react';
 
 export type UserDTO = {
@@ -10,7 +10,7 @@ export type UserDTO = {
 
 export type AuthContextDataProps = {
   user: UserDTO;
-  signIn: (email: string, password: string) => void;
+  signIn: (email: string, password: string) => Promise<void>;
 }
 
 type AuthContextProviderProps = {
@@ -21,24 +21,33 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
-  const [user, setUser] = useState({
-    id: '1',
-    name: 'John Doe',
-    email: 's0v7s@example.com',
-    avatar: 'https://i.pravatar.cc/300',
-  });
+  const [user, setUser] = useState<UserDTO>({} as UserDTO);
 
   // Atualiza o estado do usuário, após o login
-  function signIn(email: string, password: string) {
-    setUser({
-        id: '',
-        name: '',
-        email: email,
-        avatar: '',
-    });
+  async function signIn(email: string, password: string) {
+    // Faz a requisição para o backend
+    try {
+      const response = await api.post('/sessions', { email, password });
+      console.log('response AuthContext', response.data);
+
+      if (response.data.user) {
+        // Se tiver um usuário, no retorno do response do backend
+        // Atualiza o estado do usuário
+        setUser(response.data.user);
+
+        // Atualiza o header 'Authorization' com o token recebido no axios
+        // api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+      }
+    } catch (error) {
+      console.log('Error ao fazer login', error);
+
+    }
   }
 
   return (
+    // dados do contexto
+    // O valor do contexto é o que será acessado em outros componentes
+    // podem ser funções, estados, objetos, arrays, etc
     <AuthContext.Provider
       value={{ user, signIn }}
     >
