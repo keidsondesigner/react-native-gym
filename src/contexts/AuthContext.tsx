@@ -39,8 +39,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         // api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
       }
     } catch (error) {
-      console.log('Error ao fazer login', error);
-
+      throw error; // passo o erro para o componente que chamou a função
     }
   }
 

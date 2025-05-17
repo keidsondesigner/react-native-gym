@@ -81,7 +81,7 @@ export function SignUp() {
             console.log('title: ', title);
 
             toast.show({
-                id: 'error-toast',
+                id: 'signup-error-toast',
                 placement: "top",
                 duration: 5000,
                 render: ({ id }) => {
