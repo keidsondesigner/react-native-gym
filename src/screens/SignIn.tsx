@@ -1,4 +1,5 @@
-import { VStack, Image, Center, Text, Heading, ScrollView, set } from "@gluestack-ui/themed";
+import { useState } from "react";
+import { VStack, Image, Center, Text, Heading, ScrollView, useToast, Toast, ToastTitle, ToastDescription } from "@gluestack-ui/themed";
 
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
@@ -10,6 +11,7 @@ import BackgroundImage from '@assets/background.png';
 import Logo from '@assets/logo.svg';
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { AppError } from "@utils/AppError";
 
 
 type SignInFormDataProps = {
@@ -18,6 +20,9 @@ type SignInFormDataProps = {
 }
 
 export function SignIn() {
+    const [isLoading, setIsLoading] = useState(false);
+    const toast = useToast();
+
     const { signIn } = useAuth();
 
     const { control, handleSubmit, formState: { errors } } = useForm<SignInFormDataProps>({
@@ -33,9 +38,47 @@ export function SignIn() {
         navigation.navigate("SignUp");
     }
 
-    function handleSignIn(data: SignInFormDataProps) {
-        console.log(data);
-        signIn(data.email, data.password);
+    async function handleSignIn(data: SignInFormDataProps) {
+        try {
+            setIsLoading(true);
+            console.log('handleSignIn', data);
+            await signIn(data.email, data.password);
+        } catch (error) {
+            console.log('error', error);
+            // 1 - verifico se o erro é tratavel, se true, significa que é uma instancia de AppError;
+            const isAppError = error instanceof AppError;
+            // 2 - se for um erro tratável, passo a mensagem personalizada do erro;
+            const title = isAppError ? error.message : 'Não foi possível acessar. Tente novamente mais tarde.';
+
+            toast.show({
+                id: 'signin-error-toast',
+                placement: "top",
+                duration: 5000,
+                render: ({ id }) => {
+                    return (
+                        <Toast
+                            nativeID={`toast-${id}`}
+                            action="error"
+                            variant="solid"
+                            mt="$14"
+                            bg="$red500"
+                            width={343}
+                        >
+                            <VStack>
+                                <ToastTitle color="$textDark900" fontSize="$lg" fontWeight="bold">
+                                    Error!
+                                </ToastTitle>
+                                <ToastDescription color="$textDark900" size="md">
+                                    {title}
+                                </ToastDescription>
+                            </VStack>
+                        </Toast>
+                    )
+                },
+            });
+        }finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -112,6 +155,7 @@ export function SignIn() {
                         <Button
                             title="Acessar"
                             onPress={handleSubmit(handleSignIn)}
+                            isLoading={isLoading}
                         />
 
                     </Center>
