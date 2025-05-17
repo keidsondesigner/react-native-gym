@@ -40,6 +40,7 @@ export function SignIn() {
 
     async function handleSignIn(data: SignInFormDataProps) {
         try {
+            setIsLoading(true);
             console.log('handleSignIn', data);
             await signIn(data.email, data.password);
         } catch (error) {
@@ -154,6 +155,7 @@ export function SignIn() {
                         <Button
                             title="Acessar"
                             onPress={handleSubmit(handleSignIn)}
+                            isLoading={isLoading}
                         />
 
                     </Center>
