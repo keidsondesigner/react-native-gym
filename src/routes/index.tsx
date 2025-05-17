@@ -17,11 +17,14 @@ export function Routes() {
     const  { user } = useAuth();
     console.log('contextData - info do usuário', user);
 
+    // 6 - Se o usuário estiver autenticado, renderiza as rotas do aplicativo, caso contrário, renderiza as rotas de autenticação
+    // se não exibi as rotas para autenticação
+    // {user.id ? <AppRoutes /> : <AuthRoutes />}
+
     return (
         <Box flex={1} bg="$gray700">
             <NavigationContainer theme={theme}>
-                {/* <AuthRoutes /> */}
-                <AppRoutes />
+                {user.id ? <AppRoutes /> : <AuthRoutes />}
             </NavigationContainer>
         </Box>
     );
