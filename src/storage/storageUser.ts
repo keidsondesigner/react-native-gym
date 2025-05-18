@@ -13,3 +13,17 @@ export async function storageUserSave(user: UserDTO): Promise<void> {
   }
 }
 
+
+// Busco o User no AsyncStorage[Storage Local]
+export async function storageUserGet(): Promise<UserDTO> {
+  try {
+    const storage = await AsyncStorage.getItem(USER_STORAGE);
+    // Se não tiver nada no storage, retorno um objeto vazio
+    // Se tiver, converto o storage que é uma string em um objeto
+    // e retorno o objeto do tipo UserDTO
+    const user: UserDTO = storage ? JSON.parse(storage) : {};
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
