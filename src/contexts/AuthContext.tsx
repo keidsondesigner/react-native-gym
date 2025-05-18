@@ -1,5 +1,8 @@
-import { api } from '@services/api';
 import { createContext, ReactNode, useState } from 'react';
+
+import { storageUserSave } from '@storage/storageUser';
+
+import { api } from '@services/api';
 
 export type UserDTO = {
   id: string;
@@ -30,10 +33,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const response = await api.post('/sessions', { email, password });
       console.log('response AuthContext', response.data);
 
+      // Se tiver um usuário, no retorno do response do backend
       if (response.data.user) {
-        // Se tiver um usuário, no retorno do response do backend
-        // Atualiza o estado do usuário
+        // Salva o usuario no estado setUser do AuthContext
         setUser(response.data.user);
+        // Salva o usuário no AsyncStorage[Storage Local]
+        storageUserSave(response.data.user);
 
         // Atualiza o header 'Authorization' com o token recebido no axios
         // api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
