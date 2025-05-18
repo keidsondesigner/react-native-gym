@@ -1,6 +1,6 @@
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 
-import { storageUserSave } from '@storage/storageUser';
+import { storageUserGet, storageUserSave } from '@storage/storageUser';
 
 import { api } from '@services/api';
 
@@ -47,6 +47,29 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       throw error; // passo o erro para o componente que chamou a função
     }
   }
+
+  async function loadUserStorageData() {
+    try {
+      // Busco o usuário no AsyncStorage[Storage Local]
+      // verifica se o usuário esta logado
+      const userLogged = await storageUserGet();
+
+      // Se o usuário existir, atualizo o estado do usuário
+      // Se o usuário existir, ele está logado no app
+      if (userLogged) {
+        // Atualiza o estado com os dados do User do Storage Local
+        setUser(userLogged);
+      }
+    } catch (error) {
+      throw error; // passo o erro para o componente que chamou a função
+    }
+  }
+
+  useEffect(() => {
+    // Carrego o usuário do AsyncStorage[Storage Local] quando o app inicia
+    loadUserStorageData();
+  }, []);
+
 
   return (
     // dados do contexto
