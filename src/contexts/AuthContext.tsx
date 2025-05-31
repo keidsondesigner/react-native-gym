@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 
-import { storageUserGet, storageUserSave } from '@storage/storageUser';
+import { storageUserGet, storageUserSave, storageUserRemove } from '@storage/storageUser';
 
 import { api } from '@services/api';
 import { set } from '@gluestack-style/react';
@@ -15,6 +15,7 @@ export type UserDTO = {
 export type AuthContextDataProps = {
   user: UserDTO;
   signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
   isLoadingUserStorageData: boolean;
   // isLoadingUserStorageData: boolean; // Indica se os dados do usuário estão sendo carregados do Storage Local
 }
@@ -53,6 +54,22 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  async function signOut() {
+    try {
+      setIsLoadingUserStorageData(true);
+      // limpo o estado do User, passando um objeto vazio;
+      setUser({} as UserDTO);
+      // Limpo o AsyncStorage[Storage Local], passando um objeto vazio
+      await storageUserRemove();
+      // Isso indica que o usuário não está mais logado no app
+
+    } catch (error) {
+      throw error; // passo o erro para o componente que chamou a função
+    } finally {
+      setIsLoadingUserStorageData(false);
+    }
+  }
+
   async function loadUserStorageData() {
     try {
       // Busco o usuário no AsyncStorage[Storage Local]
@@ -87,6 +104,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       value={{
         user,
         signIn,
+        signOut,
         isLoadingUserStorageData
       }}
     >

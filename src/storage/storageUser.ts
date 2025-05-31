@@ -27,3 +27,12 @@ export async function storageUserGet(): Promise<UserDTO> {
     throw error;
   }
 }
+
+// Limpo o User do AsyncStorage[Storage Local]
+export async function storageUserRemove(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(USER_STORAGE);
+  } catch (error) {
+    throw error;
+  }
+}
