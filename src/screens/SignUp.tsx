@@ -12,6 +12,7 @@ import BackgroundImage from '@assets/background.png';
 import Logo from '@assets/logo.svg';
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { useAuth } from "@hooks/useAuth";
 
 type SignUpFormDataProps = {
     name: string;
@@ -22,6 +23,7 @@ type SignUpFormDataProps = {
 
 export function SignUp() {
     const [isLoading, setIsLoading] = useState(false);
+    const { signIn } = useAuth(); // Importando o hook useAuth para usar a função signIn
     const toast = useToast();
 
     // const [name, setName] = useState('');
@@ -70,9 +72,13 @@ export function SignUp() {
         // usando Axios
         try {
             setIsLoading(true);
+
             const response = await api.post('/users', { name, email, password });
             console.log(response.data);
+            // Após criar a conta, navega para a tela de login
+            await signIn(email, password);
         } catch (error) {
+            setIsLoading(false);
             // Se o erro for uma instância da classe AppError, retorna true;
             const isAppError = error instanceof AppError;
             console.log('isAppError: ', isAppError);
