@@ -3,6 +3,7 @@ import { createContext, ReactNode, useEffect, useState } from 'react';
 import { storageUserGet, storageUserSave } from '@storage/storageUser';
 
 import { api } from '@services/api';
+import { set } from '@gluestack-style/react';
 
 export type UserDTO = {
   id: string;
@@ -14,6 +15,8 @@ export type UserDTO = {
 export type AuthContextDataProps = {
   user: UserDTO;
   signIn: (email: string, password: string) => Promise<void>;
+  isLoadingUserStorageData: boolean;
+  // isLoadingUserStorageData: boolean; // Indica se os dados do usuário estão sendo carregados do Storage Local
 }
 
 type AuthContextProviderProps = {
@@ -25,6 +28,8 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
+
+  const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
 
   // Atualiza o estado do usuário, após o login
   async function signIn(email: string, password: string) {
@@ -62,6 +67,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       }
     } catch (error) {
       throw error; // passo o erro para o componente que chamou a função
+    } finally {
+      // Indica que os dados do User foram carregados do Storage Local
+      setIsLoadingUserStorageData(false);
     }
   }
 
@@ -76,7 +84,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     // O valor do contexto é o que será acessado em outros componentes
     // podem ser funções, estados, objetos, arrays, etc
     <AuthContext.Provider
-      value={{ user, signIn }}
+      value={{
+        user,
+        signIn,
+        isLoadingUserStorageData
+      }}
     >
       {children}
     </AuthContext.Provider>
